@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="text_gray">#757575</color>
+
+    <color name="textDark">#616161</color>
+
+    <color name="background_color">#eeeeee</color>
+
+    <color name="card_color">#F5F5F5</color>
+
+
+    <!-- 50 -->
+    <color name="textLightest">#E1F5FE</color>
+
+    <!-- 100 -->
+    <color name="textLighter">#B3E5FC</color>
+
+    <!-- 200 -->
+    <color name="textLight">#81D4FA</color>
+
+    <!-- 400 -->
+    <color name="accent">#29B6F6</color>
+
+    <!-- 600 -->
+    <color name="action_bar_light_blue">#039BE5</color>
+
+    <!-- 700 -->
+    <color name="status_bar_darker_blue">#0288D1</color>
+
+</resources>
