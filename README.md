@@ -1,7 +1,7 @@
-# Salmon Activity Tracker
+# Salmon Tracker
 #### Release 0.1
 
-#### App for activity tracking for Android 5.x.x 
+#### App for activity tracking on Android 5.x.x 
 
 ##### Requirements
 * Java 7
