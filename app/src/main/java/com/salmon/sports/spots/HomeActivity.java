@@ -7,6 +7,8 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +18,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class HomeActivity extends Activity
@@ -23,6 +27,11 @@ public class HomeActivity extends Activity
 
     private HomeModel model;
     private AddActivity addActivity;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
+
 
     // UI components
     private Button addBtn;
@@ -46,9 +55,25 @@ public class HomeActivity extends Activity
      */
     private CharSequence mTitle;
 
+    // specify an adapter (see also next example)
+    String[] myDataset = {"","","","","","",""};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.layout_home);
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        //mRecyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
 
         model = new HomeModel();
         addActivity = new AddActivity();
@@ -56,12 +81,17 @@ public class HomeActivity extends Activity
         addActivity.setModel(model);
 
         // Adding dummy data to items
-        model.items.add(new RunningItem(new Date(), 20.54));
-        model.items.add(new WalkingItem(new Date(), 49.03));
+        /*model.items.add(new RunningItem(new Date(), 20.54));
+        model.items.add(new WalkingItem(new Date(), 49.03));*/
         // end of dummy data
 
 
-        setContentView(R.layout.layout_home);
+        for(int i = 0; i < model.items.size(); i++) {
+            myDataset[i] = model.items.get(i).toString();
+        }
+
+        mAdapter = new MyAdapter(myDataset);
+        mRecyclerView.setAdapter(mAdapter);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -123,6 +153,21 @@ public class HomeActivity extends Activity
         actionBar.setTitle(mTitle);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        for(int i = 0; i < model.items.size(); i++) {
+            System.out.println("ADDED: " + model.items.get(i).toString());
+            myDataset[i] = model.items.get(i).toString();
+        }
+
+        mAdapter = new MyAdapter(myDataset);
+        mRecyclerView.setAdapter(mAdapter);
+
+
+        mAdapter.notifyDataSetChanged();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

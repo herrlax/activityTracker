@@ -16,4 +16,8 @@ abstract class SportItem {
 
     public abstract String getTITLE();
 
+    public String toString() {
+        return duration + " h ";
+    }
+
 }

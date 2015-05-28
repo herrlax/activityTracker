@@ -6,6 +6,8 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -42,6 +44,8 @@ public class AddActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         this.arraySpinner = new String[] {
                 "Walking", "Running", "Swimming", "Cycling"
@@ -84,7 +88,25 @@ public class AddActivity extends Activity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                model.items.add(new RunningItem(new Date(), 26.14));
+                double duration = Integer.parseInt(durationHourText.getText().toString()) + Double.parseDouble(durationMinText.getText().toString())/60;
+
+                System.out.println("ITEM WS: " + itemSpinner.getSelectedItem().toString());
+
+                SportItem sportItem = null;
+
+                // type was walking
+                if(itemSpinner.getSelectedItem().toString().equals("Walking")) {
+                    sportItem = new WalkingItem(new Date(), duration);
+
+                } else if(itemSpinner.getSelectedItem().toString().equals("Running")) {
+                    sportItem = new RunningItem(new Date(), duration);
+
+                } else {
+                    sportItem = new WalkingItem(new Date(), 0);
+
+                }
+
+                model.items.add(sportItem);
                 AddActivity.this.finish();
             }
         });

@@ -17,4 +17,8 @@ public class WalkingItem extends SportItem {
         return TITLE;
     }
 
+    @Override
+    public String toString() {
+        return super.toString() + TITLE;
+    }
 }

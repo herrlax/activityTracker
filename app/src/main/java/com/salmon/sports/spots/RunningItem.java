@@ -16,4 +16,9 @@ public class RunningItem extends SportItem {
     public String getTITLE() {
         return TITLE;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + TITLE;
+    }
 }
