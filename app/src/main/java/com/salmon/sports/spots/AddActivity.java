@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.Menu;
@@ -18,10 +20,14 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import com.google.gson.Gson;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * Activity used for addding an item (running/walking/..)
@@ -94,6 +100,7 @@ public class AddActivity extends Activity {
 
                 SportItem sportItem;
 
+
                 // type was walking
                 if(itemSpinner.getSelectedItem().toString().equals("Walking")) {
                     sportItem = new WalkingItem(dateText.getText().toString(), duration);
@@ -103,10 +110,10 @@ public class AddActivity extends Activity {
 
                 } else {
                     sportItem = new WalkingItem(dateText.getText().toString(), 0);
-
                 }
 
 
+                saveItem(sportItem);
 
                 model.items.add(sportItem);
                 AddActivity.this.finish();
@@ -120,6 +127,23 @@ public class AddActivity extends Activity {
                 AddActivity.this.finish();
             }
         });
+    }
+
+    public void saveItem(SportItem item) {
+
+
+        /*SharedPreferences sharedPref = AddActivity.this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+*/
+        Set<String> stringSet = new HashSet();
+
+        // convert sportItem into gson object
+        /*Gson gson = new Gson();
+        String jsonString = gson.toJson(item);
+        stringSet.add(jsonString);*/
+
+        // editor.putStringSet("SavedItems", stringSet);
+        // System.out.println("SAVED " + jsonString);
     }
 
     public void showStartDateDialog(View v){

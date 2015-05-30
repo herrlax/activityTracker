@@ -4,10 +4,10 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,9 +16,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 
-import java.util.Date;
+import com.google.gson.Gson;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,9 +31,6 @@ public class HomeActivity extends Activity
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-
-    // array to put sportitems in
-    String[] myDataset;
 
     // UI components
     private Button addBtn;
@@ -63,10 +60,7 @@ public class HomeActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        System.out.println("RUN ONCREATE!!!!!!");
-
         if(model == null) {
-            System.out.println("MODEL WAS NULL!!!!!!!!!!!!!!!!!!!!!!!!!!!!q");
             System.out.println();
             model = new HomeModel();
         }
@@ -165,10 +159,26 @@ public class HomeActivity extends Activity
     public void onResume() {
         super.onResume();
 
+        // Loads previously saved items into items in model
+        loadItems();
+
         mAdapter = new MyAdapter(model.items);
         mRecyclerView.setAdapter(mAdapter);
 
         mAdapter.notifyDataSetChanged();
+    }
+
+    public void loadItems() {
+
+        /*SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        Set<String> jsonStringSet = sharedPref.getStringSet("SavedItems", new HashSet<String>());
+
+        for(String itemString : jsonStringSet) {
+            Gson gson = new Gson();
+            SportItem fetchedItem = gson.fromJson(itemString, SportItem.class);
+            System.out.println(itemString.toString());
+        }*/
+
     }
 
     @Override

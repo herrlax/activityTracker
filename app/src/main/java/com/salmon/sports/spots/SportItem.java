@@ -14,6 +14,10 @@ abstract class SportItem {
         return date;
     }
 
+    public double getDuration() {
+        return duration;
+    }
+
     public int getICON() {
         return ICON;
     }
