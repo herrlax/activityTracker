@@ -8,7 +8,13 @@ import java.util.Date;
 public class WalkingItem extends SportItem {
     private final String TITLE = "walking";
 
-    public WalkingItem(Date date, double duration) {
+    private final int ICON = R.drawable.walking;
+
+    public int getICON() {
+        return ICON;
+    }
+
+    public WalkingItem(String date, double duration) {
         super(date, duration);
     }
 

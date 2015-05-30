@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,12 +27,13 @@ public class HomeActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     private HomeModel model;
-    private AddActivity addActivity;
+    private AddActivity addActivity = new AddActivity();
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-
+    // array to put sportitems in
+    String[] myDataset;
 
     // UI components
     private Button addBtn;
@@ -56,11 +58,18 @@ public class HomeActivity extends Activity
     private CharSequence mTitle;
 
     // specify an adapter (see also next example)
-    String[] myDataset = {"","","","","","",""};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        System.out.println("RUN ONCREATE!!!!!!");
+
+        if(model == null) {
+            System.out.println("MODEL WAS NULL!!!!!!!!!!!!!!!!!!!!!!!!!!!!q");
+            System.out.println();
+            model = new HomeModel();
+        }
 
         setContentView(R.layout.layout_home);
 
@@ -70,13 +79,23 @@ public class HomeActivity extends Activity
         // in content do not change the layout size of the RecyclerView
         //mRecyclerView.setHasFixedSize(true);
 
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        // setting the layoutmanager if null
+        if(mLayoutManager == null) {
+            mLayoutManager = new LinearLayoutManager(this);
+            mRecyclerView.setLayoutManager(mLayoutManager);
+        }
+
+        // setting new adapter for the recycler view if null
+        if(mAdapter == null) {
+            mAdapter = new MyAdapter(null);
+            mRecyclerView.setAdapter(mAdapter);
+
+            mNavigationDrawerFragment = (NavigationDrawerFragment)
+                    getFragmentManager().findFragmentById(R.id.navigation_drawer);
+            mTitle = getTitle();
+        }
 
 
-        model = new HomeModel();
-        addActivity = new AddActivity();
 
         addActivity.setModel(model);
 
@@ -86,21 +105,10 @@ public class HomeActivity extends Activity
         // end of dummy data
 
 
-        for(int i = 0; i < model.items.size(); i++) {
+        /*for(int i = 0; i < model.items.size(); i++) {
             myDataset[i] = model.items.get(i).toString();
-        }
+        }*/
 
-        mAdapter = new MyAdapter(myDataset);
-        mRecyclerView.setAdapter(mAdapter);
-
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
-
-        // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
-                R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
 
         // Fetching UI components
         initUI();
@@ -157,14 +165,8 @@ public class HomeActivity extends Activity
     public void onResume() {
         super.onResume();
 
-        for(int i = 0; i < model.items.size(); i++) {
-            System.out.println("ADDED: " + model.items.get(i).toString());
-            myDataset[i] = model.items.get(i).toString();
-        }
-
-        mAdapter = new MyAdapter(myDataset);
+        mAdapter = new MyAdapter(model.items);
         mRecyclerView.setAdapter(mAdapter);
-
 
         mAdapter.notifyDataSetChanged();
     }

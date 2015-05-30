@@ -8,11 +8,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Mikael Malmqvist on 2015-05-28.
  */
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
-    private String[] mDataset;
+    private List<SportItem> mDataset;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -21,6 +24,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         // each data item is just a string in this case
         public CardView cardView;
         public TextView cardText;
+        public TextView cardDateText;
         public ImageView cardIcon;
 
         // TODO define stuff for the cardview here..
@@ -32,11 +36,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             cardView = (CardView)v.findViewById(R.id.card_view);
             cardText = (TextView)v.findViewById(R.id.card_text);
             cardIcon = (ImageView)v.findViewById(R.id.card_icon);
+            cardDateText = (TextView)v.findViewById(R.id.date_text);
         }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter(String[] myDataset) {
+    public MyAdapter(List<SportItem> myDataset) {
         mDataset = myDataset;
     }
 
@@ -59,14 +64,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.cardText.setText(mDataset[position]);
-        holder.cardIcon.setImageResource(R.drawable.greencircle);
+        holder.cardText.setText(mDataset.get(position).toString());
+        holder.cardIcon.setImageResource(mDataset.get(position).getICON());
+        holder.cardDateText.setText(mDataset.get(position).getDate());
 
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        return mDataset.size();
+
     }
 }

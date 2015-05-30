@@ -7,9 +7,18 @@ import java.util.Date;
  */
 abstract class SportItem {
     private double duration;
-    private Date date;
+    private String date;
+    private final int ICON = R.drawable.greencircle;
 
-    public SportItem(Date date, double duration) {
+    public String getDate() {
+        return date;
+    }
+
+    public int getICON() {
+        return ICON;
+    }
+
+    public SportItem(String date, double duration) {
         this.date = date;
         this.duration = duration;
     }

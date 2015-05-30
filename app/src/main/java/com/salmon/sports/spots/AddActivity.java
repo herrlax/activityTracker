@@ -36,7 +36,7 @@ public class AddActivity extends Activity {
     private ImageView itemIcon;
     private EditText durationMinText;
     private EditText durationHourText;
-    private EditText distanceText;
+    //private EditText distanceText;
     private EditText dateText;
     private Button submitButton;
     private Button cancelButton;
@@ -67,7 +67,7 @@ public class AddActivity extends Activity {
         itemIcon = (ImageView) findViewById(R.id.itemIcon);
         durationHourText = (EditText) findViewById(R.id.duationHourText);
         durationMinText = (EditText) findViewById(R.id.duationMinText);
-        distanceText = (EditText) findViewById(R.id.distanceText);
+        //distanceText = (EditText) findViewById(R.id.distanceText);
         submitButton = (Button) findViewById(R.id.submitButton);
         cancelButton = (Button) findViewById(R.id.cancelButton);
         dateText = (EditText) findViewById(R.id.dateText);
@@ -92,19 +92,21 @@ public class AddActivity extends Activity {
 
                 System.out.println("ITEM WS: " + itemSpinner.getSelectedItem().toString());
 
-                SportItem sportItem = null;
+                SportItem sportItem;
 
                 // type was walking
                 if(itemSpinner.getSelectedItem().toString().equals("Walking")) {
-                    sportItem = new WalkingItem(new Date(), duration);
+                    sportItem = new WalkingItem(dateText.getText().toString(), duration);
 
                 } else if(itemSpinner.getSelectedItem().toString().equals("Running")) {
-                    sportItem = new RunningItem(new Date(), duration);
+                    sportItem = new RunningItem(dateText.getText().toString(), duration);
 
                 } else {
-                    sportItem = new WalkingItem(new Date(), 0);
+                    sportItem = new WalkingItem(dateText.getText().toString(), 0);
 
                 }
+
+
 
                 model.items.add(sportItem);
                 AddActivity.this.finish();

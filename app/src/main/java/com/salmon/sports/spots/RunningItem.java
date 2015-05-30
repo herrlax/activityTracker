@@ -7,8 +7,14 @@ import java.util.Date;
  */
 public class RunningItem extends SportItem {
     private final String TITLE = "running";
+    private final int ICON = R.drawable.running;
 
-    public RunningItem(Date date, double duration) {
+    public int getICON() {
+        return ICON;
+    }
+
+
+    public RunningItem(String date, double duration) {
         super(date, duration);
     }
 
