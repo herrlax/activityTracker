@@ -131,12 +131,18 @@ public class AddActivity extends Activity {
         });
     }
 
+
+
     public void saveItem(SportItem item) {
 
         SharedPreferences sharedPref = AddActivity.this.getSharedPreferences(SHARED, Context.MODE_PRIVATE);
         //Set<String> jsonStringSet = sharedPref.getStringSet(SAVEDPREF, new HashSet<String>());
         //System.out.println("Saving to list of size: " + jsonStringSet.size());
-        Set<String> mySet = sharedPref.getStringSet(SAVEDPREF, new HashSet<String>());
+        Set<String> mySet = new HashSet<>();
+
+        mySet.addAll(sharedPref.getStringSet(SAVEDPREF, new HashSet<String>()));
+
+
 
         System.out.println("SIZE OF mySET: " + mySet.size());
         mySet.add(JsonUtil.toJSon(item));

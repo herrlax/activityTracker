@@ -183,6 +183,7 @@ public class HomeActivity extends Activity
 
         SharedPreferences sharedPref = HomeActivity.this.getSharedPreferences(SHARED, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
+        
 
         // convert sportItem into gson object
         editor.putStringSet(SAVEDPREF, jsonArray);
