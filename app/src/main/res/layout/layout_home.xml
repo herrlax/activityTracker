@@ -40,7 +40,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:text="75 % of daily goal reached"
+                    android:text=""
                     android:textColor="@color/textLightest"
                     android:id="@+id/goalText"
                     android:layout_below="@id/activityText" />

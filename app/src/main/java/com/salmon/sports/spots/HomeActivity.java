@@ -19,6 +19,10 @@ import android.widget.Button;
 
 import com.google.gson.Gson;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,6 +35,9 @@ public class HomeActivity extends Activity
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+
+    private final String SHARED = "SHAREDPREF";
+    private final String SAVEDPREF = "SAVEDITEMS";
 
     // UI components
     private Button addBtn;
@@ -60,10 +67,9 @@ public class HomeActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(model == null) {
-            System.out.println();
-            model = new HomeModel();
-        }
+        System.out.println("ON CREATE!!");
+
+        model = new HomeModel();
 
         setContentView(R.layout.layout_home);
 
@@ -79,19 +85,18 @@ public class HomeActivity extends Activity
             mRecyclerView.setLayoutManager(mLayoutManager);
         }
 
-        // setting new adapter for the recycler view if null
-        if(mAdapter == null) {
-            mAdapter = new MyAdapter(null);
-            mRecyclerView.setAdapter(mAdapter);
-
-            mNavigationDrawerFragment = (NavigationDrawerFragment)
-                    getFragmentManager().findFragmentById(R.id.navigation_drawer);
-            mTitle = getTitle();
-        }
-
-
-
         addActivity.setModel(model);
+
+
+        //mAdapter = new MyAdapter(model.items);
+        //mRecyclerView.setAdapter(mAdapter);
+
+        mNavigationDrawerFragment = (NavigationDrawerFragment)
+                getFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mTitle = getTitle();
+
+
+
 
         // Adding dummy data to items
         /*model.items.add(new RunningItem(new Date(), 20.54));
@@ -116,7 +121,7 @@ public class HomeActivity extends Activity
             @Override
             public void onClick(View v) {
                 System.out.println("SIZE OF LIST: " + model.items.size());
-                
+
                 // TODO: Open AddActivity
                 Intent intent = new Intent(HomeActivity.this, AddActivity.class);
                 startActivity(intent);
@@ -156,9 +161,40 @@ public class HomeActivity extends Activity
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+
+        System.out.println("Saving items..");
+
+        Set<String> jsonArray = new HashSet<>();
+
+        for(SportItem item : model.items) {
+            jsonArray.add(JsonUtil.toJSon(item));
+            System.out.println("ADDED: " + JsonUtil.toJSon(item));
+        }
+
+        // Saving the items from model to device
+        saveItems(jsonArray);
+
+    }
+
+    public void saveItems(Set<String> jsonArray) {
+        System.out.println("saving array of size: " + jsonArray.size());
+
+        SharedPreferences sharedPref = HomeActivity.this.getSharedPreferences(SHARED, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+
+        // convert sportItem into gson object
+        editor.putStringSet(SAVEDPREF, jsonArray);
+        editor.commit();
+
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
 
+        System.out.println("ON RESUME!!");
         // Loads previously saved items into items in model
         loadItems();
 
@@ -166,18 +202,56 @@ public class HomeActivity extends Activity
         mRecyclerView.setAdapter(mAdapter);
 
         mAdapter.notifyDataSetChanged();
+
     }
 
     public void loadItems() {
+        System.out.println("LOADING ITEMS!!");
 
-        /*SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        Set<String> jsonStringSet = sharedPref.getStringSet("SavedItems", new HashSet<String>());
+        SharedPreferences sharedPref = HomeActivity.this.getSharedPreferences(SHARED, Context.MODE_PRIVATE);
+        Set<String> jsonStringSet = sharedPref.getStringSet(SAVEDPREF, new HashSet<String>());
+        System.out.println("Got set of size: " + jsonStringSet.size());
+        System.out.println("GOT: " + sharedPref.getInt("Act", 0));
+
+        model.items = new ArrayList<>();
 
         for(String itemString : jsonStringSet) {
-            Gson gson = new Gson();
-            SportItem fetchedItem = gson.fromJson(itemString, SportItem.class);
-            System.out.println(itemString.toString());
-        }*/
+            //Gson gson = new Gson();
+            //SportItem fetchedItem = gson.fromJson(itemString, SportItem.class);
+            //System.out.println(itemString.toString());
+
+            try {
+                JSONObject jObj = new JSONObject(itemString);
+                Double duration = jObj.getDouble("duration");
+                String date = jObj.getString("date");
+                String type = jObj.getString("type");
+
+                /*System.out.println("NEW JSONPBJECT!!!");
+                System.out.println("Duration: " + duration);
+                System.out.println("Date: " + date);
+                System.out.println("type: " + type);
+                System.out.println("");
+*/
+                SportItem loadedItem = null;
+
+                // Recreating list from json
+                if(type.equals("walking")) {
+                    loadedItem = new WalkingItem(date, duration);
+                } else if (type.equals("running")) {
+                    loadedItem = new RunningItem(date, duration);
+                } else {
+                    loadedItem = new WalkingItem(date, duration);
+                }
+
+                if(loadedItem != null) {
+                    model.items.add(loadedItem);
+                }
+
+            } catch (JSONException exp) {
+                System.out.println("JSONException cought!!");
+            }
+
+        }
 
     }
 

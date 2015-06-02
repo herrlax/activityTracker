@@ -11,7 +11,7 @@
     <string name="spinner_act">Walking</string>
 
     <string name="action_back">Back</string>
-    <string name="action_goal">Daily goal</string>
+    <string name="action_workout">Workout</string>
     <string name="action_settings">Settings</string>
     <string name="action_help">Help and feedback</string>
 </resources>

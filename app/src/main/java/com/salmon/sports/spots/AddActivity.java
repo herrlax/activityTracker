@@ -37,6 +37,8 @@ public class AddActivity extends Activity {
     HomeModel model;
     private String[] arraySpinner;
 
+    private final String SAVEDPREF = "SAVEDITEMS";
+    private final String SHARED = "SHAREDPREF";
 
     private Spinner itemSpinner;
     private ImageView itemIcon;
@@ -131,19 +133,21 @@ public class AddActivity extends Activity {
 
     public void saveItem(SportItem item) {
 
+        SharedPreferences sharedPref = AddActivity.this.getSharedPreferences(SHARED, Context.MODE_PRIVATE);
+        //Set<String> jsonStringSet = sharedPref.getStringSet(SAVEDPREF, new HashSet<String>());
+        //System.out.println("Saving to list of size: " + jsonStringSet.size());
+        Set<String> mySet = sharedPref.getStringSet(SAVEDPREF, new HashSet<String>());
 
-        /*SharedPreferences sharedPref = AddActivity.this.getPreferences(Context.MODE_PRIVATE);
+        System.out.println("SIZE OF mySET: " + mySet.size());
+        mySet.add(JsonUtil.toJSon(item));
+
         SharedPreferences.Editor editor = sharedPref.edit();
-*/
-        Set<String> stringSet = new HashSet();
 
-        // convert sportItem into gson object
-        /*Gson gson = new Gson();
-        String jsonString = gson.toJson(item);
-        stringSet.add(jsonString);*/
+        // Overwriting the string set
+        editor.putStringSet(SAVEDPREF, mySet);
+        editor.putInt("Act", 99);
+        editor.commit();
 
-        // editor.putStringSet("SavedItems", stringSet);
-        // System.out.println("SAVED " + jsonString);
     }
 
     public void showStartDateDialog(View v){
@@ -174,8 +178,7 @@ public class AddActivity extends Activity {
             startDay = dayOfMonth;
 
             //TODO set date in edit text
-            System.out.println("DATE: " + startDay + startMonth + startDay);
-            dateText.setText(startDay + "/" + startMonth + " - " + startYear);
+            dateText.setText(startDay + "-" + startMonth + "-" + startYear);
 
 
         }

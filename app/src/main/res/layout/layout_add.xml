@@ -35,7 +35,8 @@
                 android:scaleType="fitXY"
                 android:id="@+id/itemIcon"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true" />
+                android:layout_centerVertical="true"
+                android:src="@drawable/walking" />
 
         </RelativeLayout>
 

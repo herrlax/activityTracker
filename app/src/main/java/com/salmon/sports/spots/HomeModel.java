@@ -14,6 +14,6 @@ public class HomeModel {
     public static List<SportItem> items;
 
     public HomeModel() {
-        items = new ArrayList<>();
+        //items = new ArrayList<>();
     }
 }
