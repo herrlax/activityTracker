@@ -7,8 +7,10 @@
          https://developer.android.com/design/patterns/navigation-drawer.html -->
     <dimen name="navigation_drawer_width">320dp</dimen>
 
+    <dimen name="action_bar_height">60dp</dimen>
+
     <!-- dimensions for floating action button -->
-    <dimen name="diameter">48dp</dimen>
+    <dimen name="diameter">60dp</dimen>
     <dimen name="elevation_low">1dp</dimen>
     <dimen name="elevation_high">4dp</dimen>
     <dimen name="add_button_margin">16dp</dimen>

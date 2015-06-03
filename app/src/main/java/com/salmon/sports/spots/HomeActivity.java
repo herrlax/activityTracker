@@ -1,5 +1,6 @@
 package com.salmon.sports.spots;
 
+import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
@@ -7,6 +8,8 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Outline;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
 import android.widget.Button;
 
 import com.google.gson.Gson;
@@ -116,6 +120,16 @@ public class HomeActivity extends Activity
     // Initializing UI components
     public void initUI() {
         addBtn = (Button) findViewById(R.id.add_button);
+        addBtn.setOutlineProvider(new ViewOutlineProvider() {
+            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void getOutline(View view, Outline outline) {
+                int diameter = getResources().getDimensionPixelSize(R.dimen.diameter);
+                outline.setOval(0, 0, diameter, diameter);
+            }
+        });
+
+        addBtn.setClipToOutline(true);
 
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,7 +197,7 @@ public class HomeActivity extends Activity
 
         SharedPreferences sharedPref = HomeActivity.this.getSharedPreferences(SHARED, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        
+
 
         // convert sportItem into gson object
         editor.putStringSet(SAVEDPREF, jsonArray);

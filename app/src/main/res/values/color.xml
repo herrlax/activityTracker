@@ -10,21 +10,21 @@
 
 
     <!-- 50 -->
-    <color name="textLightest">#E1F5FE</color>
+    <color name="textLightest">#FBE9E7</color>
 
     <!-- 100 -->
-    <color name="textLighter">#B3E5FC</color>
+    <color name="textLighter">#FFCCBC</color>
 
     <!-- 200 -->
-    <color name="textLight">#81D4FA</color>
+    <color name="textLight">#FFAB91</color>
 
     <!-- 400 -->
-    <color name="accent">#29B6F6</color>
+    <color name="accent">#FF7043</color>
 
     <!-- 600 -->
-    <color name="action_bar_light_blue">#039BE5</color>
+    <color name="action_bar_light_blue">#F4511E</color>
 
     <!-- 700 -->
-    <color name="status_bar_darker_blue">#0288D1</color>
+    <color name="status_bar_darker_blue">#E64A19</color>
 
 </resources>

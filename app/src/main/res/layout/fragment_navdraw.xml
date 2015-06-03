@@ -5,7 +5,7 @@
     android:choiceMode="singleChoice"
     android:divider="@android:color/transparent"
     android:layout_gravity="left|start"
-    android:background="#ffeeeeee"
+    android:background="#BDBDBD"
     tools:context=".NavigationDrawerFragment"
 
     />
