@@ -22,6 +22,8 @@ import android.widget.Spinner;
 
 import com.google.gson.Gson;
 
+import java.text.DateFormat;
+import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -75,7 +77,6 @@ public class AddActivity extends Activity {
         itemIcon = (ImageView) findViewById(R.id.itemIcon);
         durationHourText = (EditText) findViewById(R.id.duationHourText);
         durationMinText = (EditText) findViewById(R.id.duationMinText);
-        //distanceText = (EditText) findViewById(R.id.distanceText);
         submitButton = (Button) findViewById(R.id.submitButton);
         cancelButton = (Button) findViewById(R.id.cancelButton);
         dateText = (EditText) findViewById(R.id.dateText);
@@ -88,10 +89,6 @@ public class AddActivity extends Activity {
                 showStartDateDialog(v);
             }
         });
-        /*ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, arraySpinner);
-
-        itemSpinner.setAdapter(spinnerAdapter);*/
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,8 +133,6 @@ public class AddActivity extends Activity {
     public void saveItem(SportItem item) {
 
         SharedPreferences sharedPref = AddActivity.this.getSharedPreferences(SHARED, Context.MODE_PRIVATE);
-        //Set<String> jsonStringSet = sharedPref.getStringSet(SAVEDPREF, new HashSet<String>());
-        //System.out.println("Saving to list of size: " + jsonStringSet.size());
         Set<String> mySet = new HashSet<>();
 
         mySet.addAll(sharedPref.getStringSet(SAVEDPREF, new HashSet<String>()));
@@ -151,6 +146,7 @@ public class AddActivity extends Activity {
 
         // Overwriting the string set
         editor.putStringSet(SAVEDPREF, mySet);
+        // editor.putStringSet(SAVEDPREF, new HashSet<String>());
         editor.putInt("Act", 99);
         editor.commit();
 
@@ -166,25 +162,30 @@ public class AddActivity extends Activity {
     int startMonth = c.get(Calendar.MONTH);
     int startDay = c.get(Calendar.DAY_OF_MONTH);
 
-    class StartDatePicker extends DialogFragment implements DatePickerDialog.OnDateSetListener{
+    // Date picker class
+    private class StartDatePicker extends DialogFragment implements DatePickerDialog.OnDateSetListener{
+
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // TODO Auto-generated method stub
+
             // Use the current date as the default date in the picker
-            DatePickerDialog dialog = new DatePickerDialog(AddActivity.this, this, startYear, startMonth, startDay);
+            DatePickerDialog dialog = new DatePickerDialog(AddActivity.this,
+                    this, startYear, startMonth, startDay);
+
             return dialog;
 
         }
+
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
-            // TODO Auto-generated method stub
+
             // Do something with the date chosen by the user
             startYear = year;
-            startMonth = monthOfYear;
+            String[] month = DateFormatSymbols.getInstance().getMonths();
             startDay = dayOfMonth;
 
             //TODO set date in edit text
-            dateText.setText(startDay + "-" + startMonth + "-" + startYear);
+            dateText.setText(startDay + " " + month[monthOfYear] + " " + startYear);
 
 
         }

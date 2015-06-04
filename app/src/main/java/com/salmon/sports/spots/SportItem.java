@@ -29,8 +29,28 @@ abstract class SportItem {
 
     public abstract String getTITLE();
 
+    // Parsing duration as xx h yy min
     public String toString() {
-        return duration + " h ";
+
+        int hours = (int) duration;
+        duration = Math.round(duration * 100.0);
+        duration = duration / 100.0;
+        System.out.println("DURATION IS: " + duration);
+
+        int min = (int)((duration % 1) * 60);
+
+        String hurDur = "";
+
+        if(hours > 0) {
+            hurDur = hours + " h ";
+        }
+
+        if(min > 0) {
+            hurDur += min + " min ";
+        }
+
+        return hurDur;
+
     }
 
 }
