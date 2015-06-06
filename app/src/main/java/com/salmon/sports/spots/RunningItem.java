@@ -7,7 +7,7 @@ import java.util.Date;
  */
 public class RunningItem extends SportItem {
     static final String TITLE = "running";
-    static final int ICON = R.drawable.running;
+    static final int ICON = R.drawable.runningnoshadow;
     static final int INVICON = R.drawable.invrunning;
 
     public int getICON() {

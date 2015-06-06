@@ -70,7 +70,8 @@
                 android:layout_height="@dimen/diameter"
                 android:scaleType="fitXY"
                 android:text="+"
-                android:textSize="24dp"
+                android:textSize="34sp"
+                android:textStyle="normal"
                 android:textColor="@color/textLightest"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
@@ -78,7 +79,7 @@
                 android:layout_marginBottom="20dp"
                 android:layout_marginRight="20dp"
                 android:tint="@android:color/white"
-                android:background="@drawable/redcircle"
+                android:background="@drawable/oval_ripple"
                 android:elevation="@dimen/elevation_low"/>
 
         </RelativeLayout>

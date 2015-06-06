@@ -97,7 +97,7 @@ public class AddActivity extends Activity {
                     itemIcon.setImageResource(WalkingItem.INVICON);
 
                 } else if(((TextView) view).getText().equals("Running")) {
-                    itemIcon.setImageResource(RunningItem.ICON);
+                    itemIcon.setImageResource(RunningItem.INVICON);
 
                 } else if(((TextView) view).getText().equals("Swimming")) {
 

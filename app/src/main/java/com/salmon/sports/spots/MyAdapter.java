@@ -1,10 +1,12 @@
 package com.salmon.sports.spots;
 
+import android.graphics.Outline;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -65,7 +67,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.cardText.setText(mDataset.get(position).toString());
-        // holder.cardIcon.setImageResource(mDataset.get(position).getICON());
+        holder.cardIcon.setImageResource(mDataset.get(position).getICON());
         holder.cardDateText.setText(mDataset.get(position).getDate());
 
     }
