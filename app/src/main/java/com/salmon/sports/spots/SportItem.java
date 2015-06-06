@@ -8,7 +8,9 @@ import java.util.Date;
 abstract class SportItem {
     private double duration;
     private String date;
-    private final int ICON = R.drawable.greencircle;
+    static final int ICON = R.drawable.greencircle;
+    static final int INVICON = R.drawable.greencircle;
+    static final String TITLE = "";
 
     public String getDate() {
         return date;

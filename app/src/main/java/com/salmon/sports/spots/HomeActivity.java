@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
@@ -57,6 +58,16 @@ public class HomeActivity extends Activity
 
     // specify an adapter (see also next example)
 
+
+    /**
+     * Sets hash in model based on saved json array.
+     */
+    public int getJsonHash() {
+        SharedPreferences sharedPref = HomeActivity.this.getSharedPreferences(SHARED, Context.MODE_PRIVATE);
+        Set<String> jsonStringSet = sharedPref.getStringSet(SAVEDPREF, new HashSet<String>());
+        return jsonStringSet.hashCode();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,9 +76,19 @@ public class HomeActivity extends Activity
 
         model = new HomeModel();
 
+        // sets hash in model based on saved json array
+        model.jsonHash = getJsonHash();
+
         setContentView(R.layout.layout_home);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        mRecyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // TODO detect swipe
+                return false;
+            }
+        });
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -87,6 +108,11 @@ public class HomeActivity extends Activity
 
         // Fetching UI components
         initUI();
+
+        // Loads items since there wont be a difference in
+        // the hashes due to first run..
+        Thread thread = new Thread(new LoaderRunner());
+        thread.start();
     }
 
     // Initializing UI components
@@ -111,6 +137,7 @@ public class HomeActivity extends Activity
                 startActivity(intent);
             }
         });
+
 
     }
 
@@ -148,21 +175,14 @@ public class HomeActivity extends Activity
     public void onPause() {
         super.onPause();
 
-        Set<String> jsonArray = new HashSet<>();
-
-        for(SportItem item : model.items) {
-            jsonArray.add(JsonUtil.toJSon(item));
-            System.out.println("ADDED: " + JsonUtil.toJSon(item));
-        }
-
-        // Saving the items from model to device
-        saveItems(jsonArray);
+        Thread thread = new Thread(new SaveRunner());
+        thread.run();
 
     }
 
     // Saving items
     public void saveItems(Set<String> jsonArray) {
-        System.out.println("saving array of size: " + jsonArray.size());
+        // System.out.println("saving array of size: " + jsonArray.size());
 
         SharedPreferences sharedPref = HomeActivity.this.getSharedPreferences(SHARED, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -180,53 +200,33 @@ public class HomeActivity extends Activity
         // Loads previously saved items into items in model
         loadItems();
 
-        mAdapter = new MyAdapter(model.items);
-        mRecyclerView.setAdapter(mAdapter);
-
-        mAdapter.notifyDataSetChanged();
-
     }
 
-    // loading items
-    public void loadItems() {
-        System.out.println("LOADING ITEMS!!");
+    /**
+     * Sets new adapter with fetched items, applies the adapter to
+     * the recyclerview and notifies dataset changed.
+     * Runs on UI thread.
+     */
+    public void refreshRecyclerView() {
+        HomeActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter = new MyAdapter(model.items);
+                mRecyclerView.setAdapter(mAdapter);
+                mAdapter.notifyDataSetChanged();
 
-        SharedPreferences sharedPref = HomeActivity.this.getSharedPreferences(SHARED, Context.MODE_PRIVATE);
-        Set<String> jsonStringSet = sharedPref.getStringSet(SAVEDPREF, new HashSet<String>());
-        System.out.println("Got set of size: " + jsonStringSet.size());
-        System.out.println("GOT: " + sharedPref.getInt("Act", 0));
-
-        model.items = new ArrayList<>();
-
-        for(String itemString : jsonStringSet) {
-
-            try {
-                // Parsing JSON Object
-                JSONObject jObj = new JSONObject(itemString);
-                double duration = jObj.getDouble("duration");
-                String date = jObj.getString("date");
-                String type = jObj.getString("type");
-
-                SportItem loadedItem = null;
-
-                // Recreating item from json
-                if(type.equals("walking")) {
-                    loadedItem = new WalkingItem(date, duration);
-                } else if (type.equals("running")) {
-                    loadedItem = new RunningItem(date, duration);
-                } else {
-                    loadedItem = new WalkingItem(date, duration);
-                }
-
-                if(loadedItem != null) {
-                    model.items.add(loadedItem);
-                }
-
-            } catch (JSONException exp) {
-                System.out.println("Exception when parsing JSON object. ");
-                System.out.println(exp.getStackTrace());
             }
+        });
+    }
 
+
+    // TODO do this on a new thread
+    public void loadItems() {
+
+        // checks if there's an update in the jsonarray based on hash
+        if(model.jsonHash != getJsonHash()) {
+            Thread thread = new Thread(new LoaderRunner());
+            thread.start();
         }
 
     }
@@ -299,4 +299,93 @@ public class HomeActivity extends Activity
         }
     }
 
+
+    /**
+     * Runnable for saving items from model into SharedPreferences.
+     */
+    private class SaveRunner implements Runnable {
+
+        @Override
+        public void run() {
+            Set<String> jsonArray = new HashSet<>();
+
+            if(model.items != null) {
+                for (SportItem item : model.items) {
+                    jsonArray.add(JsonUtil.toJSon(item));
+                    //System.out.println("ADDED: " + JsonUtil.toJSon(item));
+                }
+
+                // Saving the items from model to device
+                saveItems(jsonArray);
+            }
+
+            // Setting new hash for json
+            model.jsonHash = jsonArray.hashCode();
+        }
+    }
+
+
+    /**
+     * Runnable for fetching saved items.
+     * Loads JSON object from SharedPreferences,
+     * parses the items to SportItems.
+     */
+    private class LoaderRunner implements Runnable {
+
+        @Override
+        public void run() {
+            System.out.println("");
+            System.out.println(" ***************** LOADRUNNER RUNNING! ********************* ");
+            System.out.println("");
+            SharedPreferences sharedPref = HomeActivity.this.getSharedPreferences(SHARED, Context.MODE_PRIVATE);
+            Set<String> jsonStringSet = sharedPref.getStringSet(SAVEDPREF, new HashSet<String>());
+            /*System.out.println("Got set of size: " + jsonStringSet.size());
+            System.out.println("GOT: " + sharedPref.getInt("Act", 0));
+*/
+
+                model.items = new ArrayList<>();
+
+                for(String itemString : jsonStringSet) {
+
+                    try {
+                        // Parsing JSON Object
+                        JSONObject jObj = new JSONObject(itemString);
+
+                        // checks if the jsonobject has been updated based on hash
+
+                        // TODO update
+                        double duration = jObj.getDouble("duration");
+                        String date = jObj.getString("date");
+                        String type = jObj.getString("type");
+
+                        SportItem loadedItem = null;
+
+                        // Recreating item from json
+                        if(type.equals("walking")) {
+                            loadedItem = new WalkingItem(date, duration);
+                        } else if (type.equals("running")) {
+                            loadedItem = new RunningItem(date, duration);
+                        } else {
+                            loadedItem = new WalkingItem(date, duration);
+                        }
+
+                        if(loadedItem != null) {
+                            model.items.add(loadedItem);
+                        }
+
+                        refreshRecyclerView();
+
+
+
+                    } catch (JSONException exp) {
+                        System.out.println("Exception when parsing JSON object. ");
+                        System.out.println(exp.getStackTrace());
+                    }
+
+
+                }
+
+
+        }
+    }
 }

@@ -38,6 +38,7 @@
                 android:ems="10"
                 android:layout_centerVertical="true"
                 android:editable="false"
+                android:enabled="false"
                 android:layout_toRightOf="@id/typeTextView"
                 android:layout_marginLeft="10dp"
                 android:textColor="@color/textLightest"
@@ -62,7 +63,7 @@
                 android:id="@+id/itemIcon"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/walking" />
+                android:src="@drawable/invwalking" />
 
         </RelativeLayout>
 
@@ -190,7 +191,7 @@
                 android:id="@+id/submitButton"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
-                android:background="#00ffffff" />
+                android:theme="@android:style/Widget.Material.Button.Borderless.Colored" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -198,9 +199,9 @@
                 android:text="Cancel"
                 android:layout_margin="5dp"
                 android:id="@+id/cancelButton"
-                android:layout_alignTop="@+id/submitButton"
-                android:layout_toStartOf="@+id/submitButton"
-                android:background="#00ffffff" />
+                android:layout_alignParentBottom="true"
+                android:layout_toLeftOf="@+id/submitButton"
+                android:theme="@android:style/Widget.Material.Button.Borderless.Colored"/>
 
             <RelativeLayout
                 android:id="@+id/distanceLayout"

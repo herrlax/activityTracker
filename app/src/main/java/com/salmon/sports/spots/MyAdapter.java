@@ -65,7 +65,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.cardText.setText(mDataset.get(position).toString());
-        holder.cardIcon.setImageResource(mDataset.get(position).getICON());
+        // holder.cardIcon.setImageResource(mDataset.get(position).getICON());
         holder.cardDateText.setText(mDataset.get(position).getDate());
 
     }

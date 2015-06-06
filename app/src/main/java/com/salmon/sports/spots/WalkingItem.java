@@ -6,9 +6,10 @@ import java.util.Date;
  * Created by Mikael Malmqvist on 2015-05-24.
  */
 public class WalkingItem extends SportItem {
-    private final String TITLE = "walking";
+    static final String TITLE = "walking";
 
-    private final int ICON = R.drawable.walking;
+    static final int ICON = R.drawable.walking;
+    static final int INVICON = R.drawable.invwalking;
 
     public int getICON() {
         return ICON;

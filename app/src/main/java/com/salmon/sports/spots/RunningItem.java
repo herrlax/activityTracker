@@ -6,8 +6,9 @@ import java.util.Date;
  * Created by Mikael Malmqvist on 2015-05-24.
  */
 public class RunningItem extends SportItem {
-    private final String TITLE = "running";
-    private final int ICON = R.drawable.running;
+    static final String TITLE = "running";
+    static final int ICON = R.drawable.running;
+    static final int INVICON = R.drawable.invrunning;
 
     public int getICON() {
         return ICON;

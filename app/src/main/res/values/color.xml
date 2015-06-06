@@ -4,6 +4,8 @@
 
     <color name="textDark">#616161</color>
 
+    <color name="textDarkest">#414141</color>
+
     <color name="background_color">#eeeeee</color>
 
     <color name="card_color">#F5F5F5</color>

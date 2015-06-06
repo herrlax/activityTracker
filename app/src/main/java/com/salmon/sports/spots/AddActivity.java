@@ -8,9 +8,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.format.Time;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
@@ -19,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -82,6 +87,32 @@ public class AddActivity extends Activity {
         dateText = (EditText) findViewById(R.id.dateText);
         dateText.setInputType(InputType.TYPE_NULL); // disables ordinary input
         dateText.requestFocus(); // date needs focus to bring up date picker
+
+        itemSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                // set icon based on workout type
+                if(((TextView) view).getText().equals("Walking")) {
+                    itemIcon.setImageResource(WalkingItem.INVICON);
+
+                } else if(((TextView) view).getText().equals("Running")) {
+                    itemIcon.setImageResource(RunningItem.ICON);
+
+                } else if(((TextView) view).getText().equals("Swimming")) {
+
+                } else {
+                    // default
+                }
+
+                itemIcon.refreshDrawableState();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         dateText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,7 +178,7 @@ public class AddActivity extends Activity {
         // Overwriting the string set
         editor.putStringSet(SAVEDPREF, mySet);
         // editor.putStringSet(SAVEDPREF, new HashSet<String>());
-        editor.putInt("Act", 99);
+        //editor.putInt("Act", 99);
         editor.commit();
 
     }
