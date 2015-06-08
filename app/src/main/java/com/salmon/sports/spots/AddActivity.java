@@ -99,7 +99,8 @@ public class AddActivity extends Activity {
                 } else if(((TextView) view).getText().equals("Running")) {
                     itemIcon.setImageResource(RunningItem.INVICON);
 
-                } else if(((TextView) view).getText().equals("Swimming")) {
+                } else if(((TextView) view).getText().equals("Cycling")) {
+                    itemIcon.setImageResource(CyclingItem.INVICON);
 
                 } else {
                     // default
@@ -137,6 +138,9 @@ public class AddActivity extends Activity {
 
                 } else if(itemSpinner.getSelectedItem().toString().equals("Running")) {
                     sportItem = new RunningItem(dateText.getText().toString(), duration);
+
+                } else if(itemSpinner.getSelectedItem().toString().equals("Cycling")) {
+                    sportItem = new CyclingItem(dateText.getText().toString(), duration);
 
                 } else {
                     sportItem = new WalkingItem(dateText.getText().toString(), 0);

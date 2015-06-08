@@ -82,17 +82,10 @@ public class HomeActivity extends Activity
         setContentView(R.layout.layout_home);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-        mRecyclerView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                // TODO detect swipe
-                return false;
-            }
-        });
 
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        mRecyclerView.setHasFixedSize(true);
+                // use this setting to improve performance if you know that changes
+                // in content do not change the layout size of the RecyclerView
+                mRecyclerView.setHasFixedSize(true);
 
         // setting the layoutmanager if null
         if(mLayoutManager == null) {
@@ -141,8 +134,6 @@ public class HomeActivity extends Activity
         addBtn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
-
                 return false;
             }
         });
@@ -371,6 +362,8 @@ public class HomeActivity extends Activity
                             loadedItem = new WalkingItem(date, duration);
                         } else if (type.equals("running")) {
                             loadedItem = new RunningItem(date, duration);
+                        } else if (type.equals("cycling")) {
+                            loadedItem = new CyclingItem(date, duration);
                         } else {
                             loadedItem = new WalkingItem(date, duration);
                         }
